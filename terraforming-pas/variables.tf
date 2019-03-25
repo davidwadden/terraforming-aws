@@ -22,7 +22,7 @@ variable "vpc_cidr" {
 }
 
 variable "use_route53" {
-  default = true
+  default     = true
   description = "Indicate whether or not to enable route53"
 }
 

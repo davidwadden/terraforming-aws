@@ -10,27 +10,33 @@ locals {
     "16" = {
       "large" = 6
       "small" = 10
-      "infra_index" = 64
     }
     "20" = {
       "large" = 3
-      "small" = 6
-      "infra_index" = 32
+      "small" = 5
+    }
+    "21" = {
+      "large" = 2
+      "small" = 4
+    }
+    "22" = {
+      "large" = 1
+      "small" = 3
     }
   }
 
   newbits_to_large = "${lookup(local.cidr_breakout_map[local.cidr_prefix],"large")}"
   newbits_to_small = "${lookup(local.cidr_breakout_map[local.cidr_prefix],"small")}"
-  index_for_ifra_subnet = "${lookup(local.cidr_breakout_map[local.cidr_prefix],"infra_index")}"
+  large_small_cidr = "${cidrsubnet(var.vpc_cidr, local.newbits_to_large, 0)}"
 
-  rds_cidr = "${cidrsubnet(var.vpc_cidr, local.newbits_to_large, 3)}"
+  rds_cidr = "${cidrsubnet(local.large_small_cidr, local.newbits_to_small - local.newbits_to_large, 3)}"
   pas_cidr      = "${cidrsubnet(var.vpc_cidr, local.newbits_to_large, 1)}"
-  services_cidr = "${cidrsubnet(var.vpc_cidr, local.newbits_to_large, 2)}"
+  services_cidr = "${cidrsubnet(local.large_small_cidr, local.newbits_to_small - local.newbits_to_large, 2)}"
   pks_cidr      = "${cidrsubnet(var.vpc_cidr, local.newbits_to_large, 1)}"
-  pks_services_cidr = "${cidrsubnet(var.vpc_cidr, local.newbits_to_large, 2)}"
+  pks_services_cidr = "${cidrsubnet(var.vpc_cidr, local.newbits_to_large, 0)}"
   control_plane_cidr      = "${cidrsubnet(var.vpc_cidr, local.newbits_to_large, 1)}"
-  infrastructure_cidr = "${cidrsubnet(var.vpc_cidr, local.newbits_to_small, local.index_for_ifra_subnet)}"
-  public_cidr         = "${cidrsubnet(var.vpc_cidr, local.newbits_to_large, 0)}"
+  infrastructure_cidr = "${cidrsubnet(local.large_small_cidr, local.newbits_to_small - local.newbits_to_large, 0)}"
+  public_cidr         = "${cidrsubnet(local.large_small_cidr, local.newbits_to_small - local.newbits_to_large, 1)}"
 }
 
 output "public_cidr" {
