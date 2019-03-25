@@ -47,15 +47,27 @@ resource "aws_iam_user_policy_attachment" "ert" {
   policy_arn = "${aws_iam_policy.ert.arn}"
 }
 
+resource "aws_kms_key" "ebs_volume_kms_key" {
+  description             = "${var.env_name} EBS Volume KMS key"
+  deletion_window_in_days = 7
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name} EBS Volume KMS Key"))}"
+}
+
+resource "aws_kms_alias" "ebs_volume_kms_key_alias" {
+  name          = "alias/${var.env_name}-ebs-volume"
+  target_key_id = "${aws_kms_key.ebs_volume_kms_key.key_id}"
+}
+
 resource "aws_kms_key" "blobstore_kms_key" {
-  description             = "${var.env_name} KMS key"
+  description             = "${var.env_name} Blobstore KMS key"
   deletion_window_in_days = 7
 
   tags = "${merge(var.tags, map("Name", "${var.env_name} Blobstore KMS Key"))}"
 }
 
 resource "aws_kms_alias" "blobstore_kms_key_alias" {
-  name          = "alias/${var.env_name}"
+  name          = "alias/${var.env_name}-blobstore"
   target_key_id = "${aws_kms_key.blobstore_kms_key.key_id}"
 }
 

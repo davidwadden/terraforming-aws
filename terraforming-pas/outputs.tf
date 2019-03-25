@@ -38,6 +38,10 @@ output "pas_resources_backup_bucket" {
   value = "${module.pas.pas_resources_backup_bucket}"
 }
 
+output "ebs_volume_kms_key_id" {
+  value = "${module.pas.ebs_volume_kms_key_id}"
+}
+
 output "blobstore_kms_key_id" {
   value = "${module.pas.blobstore_kms_key_id}"
 }
