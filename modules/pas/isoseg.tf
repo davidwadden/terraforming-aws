@@ -45,7 +45,7 @@ resource "aws_lb" "isoseg" {
   internal                         = false
   subnets                          = ["${var.public_subnet_ids}"]
 
-  tags = "${var.tags}"
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-isoseg-lb"))}"
 }
 
 resource "aws_lb_listener" "isoseg_80" {
@@ -98,6 +98,8 @@ resource "aws_lb_target_group" "isoseg_80" {
   }
 
   count = "${var.create_isoseg_resources}"
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-iso-tg-80"))}"
 }
 
 resource "aws_lb_target_group" "isoseg_443" {
@@ -111,6 +113,8 @@ resource "aws_lb_target_group" "isoseg_443" {
   }
 
   count = "${var.create_isoseg_resources}"
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-iso-tg-443"))}"
 }
 
 resource "aws_lb_target_group" "isoseg_4443" {
@@ -124,6 +128,8 @@ resource "aws_lb_target_group" "isoseg_4443" {
   }
 
   count = "${var.create_isoseg_resources}"
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-iso-tg-4443"))}"
 }
 
 resource "aws_route53_record" "wildcard_iso_dns" {

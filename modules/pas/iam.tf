@@ -88,6 +88,8 @@ resource "aws_iam_role" "pas_bucket_access" {
   ]
 }
 EOF
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-pas-bucket-access"))}"
 }
 
 resource "aws_iam_instance_profile" "pas_bucket_access" {

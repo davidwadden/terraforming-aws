@@ -4,9 +4,7 @@ resource "aws_subnet" "pas_subnets" {
   cidr_block        = "${cidrsubnet(local.pas_cidr, 2, count.index)}"
   availability_zone = "${element(var.availability_zones, count.index)}"
 
-  tags {
-    Name = "${var.env_name}-ert-subnet${count.index}"
-  }
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-pas-subnet${count.index}"))}"
 }
 
 data "template_file" "pas_subnet_gateways" {

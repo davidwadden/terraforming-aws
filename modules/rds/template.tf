@@ -65,5 +65,5 @@ resource "aws_db_instance" "rds" {
 
   count = "${var.rds_instance_count}"
 
-  tags = "${var.tags}"
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-rds${count.index}"))}"
 }

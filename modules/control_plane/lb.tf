@@ -59,6 +59,8 @@ resource "aws_lb" "control_plane" {
   enable_cross_zone_load_balancing = true
   internal                         = false
   subnets                          = ["${var.public_subnet_ids}"]
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-control-plane-lb"))}"
 }
 
 resource "aws_lb_listener" "atc_http" {
@@ -84,6 +86,8 @@ resource "aws_lb_target_group" "atc_http" {
     interval            = 10
     protocol            = "TCP"
   }
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-atc-http-tg"))}"
 }
 
 resource "aws_lb_listener" "atc_https" {
@@ -109,6 +113,8 @@ resource "aws_lb_target_group" "atc_https" {
     interval            = 10
     protocol            = "TCP"
   }
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-atc-https-tg"))}"
 }
 
 resource "aws_lb_listener" "uaa" {
@@ -134,6 +140,8 @@ resource "aws_lb_target_group" "uaa" {
     interval            = 10
     protocol            = "TCP"
   }
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-uaa-tg"))}"
 }
 
 resource "aws_lb_listener" "tsa" {
@@ -159,6 +167,8 @@ resource "aws_lb_target_group" "tsa" {
     interval            = 10
     protocol            = "TCP"
   }
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-tsa-tg"))}"
 }
 
 resource "aws_lb_listener" "credhub" {
@@ -184,4 +194,6 @@ resource "aws_lb_target_group" "credhub" {
     interval            = 10
     protocol            = "TCP"
   }
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-credhub-tg"))}"
 }

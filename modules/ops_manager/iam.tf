@@ -44,6 +44,8 @@ resource "aws_iam_user_policy_attachment" "ops_manager" {
 
 resource "aws_iam_user" "ops_manager" {
   name = "${var.env_name}_om_user"
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-om-user"))}"
 }
 
 resource "aws_iam_access_key" "ops_manager" {
@@ -75,6 +77,8 @@ resource "aws_iam_role" "ops_manager" {
   ]
 }
 EOF
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-om-role"))}"
 }
 
 resource "aws_iam_instance_profile" "ops_manager" {

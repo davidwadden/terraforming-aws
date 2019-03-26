@@ -4,9 +4,7 @@ resource "aws_subnet" "control_plane" {
   vpc_id            = "${var.vpc_id}"
   availability_zone = "${element(var.availability_zones, count.index)}"
 
-  tags {
-    Name = "${var.env_name}-control-plane-subnet${count.index}"
-  }
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-control-plane-subnet${count.index}"))}"
 }
 
 data "template_file" "subnet_gateways" {

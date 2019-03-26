@@ -1,6 +1,8 @@
 resource "aws_route_table" "deployment" {
   count  = "${length(var.availability_zones)}"
   vpc_id = "${aws_vpc.vpc.id}"
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-deployment-rtb${count.index}"))}"
 }
 
 resource "aws_security_group" "nat_security_group" {
@@ -40,7 +42,7 @@ resource "aws_eip" "nat_eip" {
 
   vpc = true
 
-  tags = "${var.tags}"
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-nat-eip${count.index}"))}"
 }
 
 resource "aws_route" "toggle_internet" {
