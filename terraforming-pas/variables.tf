@@ -6,6 +6,10 @@ variable "hosted_zone" {
   default = ""
 }
 
+variable "parent_hosted_zone" {
+  default = ""
+}
+
 variable "access_key" {}
 
 variable "secret_key" {}
