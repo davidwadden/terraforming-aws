@@ -34,6 +34,8 @@ resource "aws_lb" "pks_api" {
   enable_cross_zone_load_balancing = true
   internal                         = false
   subnets                          = ["${var.public_subnet_ids}"]
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-pks-api"))}"
 }
 
 resource "aws_lb_listener" "pks_api_9021" {
@@ -59,6 +61,8 @@ resource "aws_lb_target_group" "pks_api_9021" {
     interval            = 10
     protocol            = "TCP"
   }
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-pks-tg-9021"))}"
 }
 
 resource "aws_lb_listener" "pks_api_8443" {
@@ -77,4 +81,6 @@ resource "aws_lb_target_group" "pks_api_8443" {
   port     = 8443
   protocol = "TCP"
   vpc_id   = "${var.vpc_id}"
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-pks-tg-8443"))}"
 }
