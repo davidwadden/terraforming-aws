@@ -35,6 +35,8 @@ resource "aws_lb" "web" {
   enable_cross_zone_load_balancing = true
   internal                         = "${var.internetless}"
   subnets                          = ["${var.public_subnet_ids}"]
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-web-lb"))}"
 }
 
 resource "aws_lb_listener" "web_80" {
@@ -68,6 +70,8 @@ resource "aws_lb_target_group" "web_80" {
   health_check {
     protocol = "TCP"
   }
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-web-tg-80"))}"
 }
 
 resource "aws_lb_target_group" "web_443" {
@@ -79,6 +83,8 @@ resource "aws_lb_target_group" "web_443" {
   health_check {
     protocol = "TCP"
   }
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-web-tg-443"))}"
 }
 
 # SSH Load Balancer
@@ -111,6 +117,8 @@ resource "aws_lb" "ssh" {
   enable_cross_zone_load_balancing = true
   internal                         = "${var.internetless}"
   subnets                          = ["${var.public_subnet_ids}"]
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-ssh-lb"))}"
 }
 
 resource "aws_lb_listener" "ssh" {
@@ -133,6 +141,8 @@ resource "aws_lb_target_group" "ssh" {
   health_check {
     protocol = "TCP"
   }
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-ssh-tg"))}"
 }
 
 # TCP Load Balancer
@@ -169,6 +179,8 @@ resource "aws_lb" "tcp" {
   enable_cross_zone_load_balancing = true
   internal                         = "${var.internetless}"
   subnets                          = ["${var.public_subnet_ids}"]
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-tcp-lb"))}"
 }
 
 resource "aws_lb_listener" "tcp" {
@@ -185,7 +197,7 @@ resource "aws_lb_listener" "tcp" {
 }
 
 resource "aws_lb_target_group" "tcp" {
-  name     = "${var.env_name}-tg-${1024 + count.index}"
+  name     = "${var.env_name}-tcp-tg-${1024 + count.index}"
   port     = "${1024 + count.index}"
   protocol = "TCP"
   vpc_id   = "${var.vpc_id}"
@@ -195,4 +207,6 @@ resource "aws_lb_target_group" "tcp" {
   health_check {
     protocol = "TCP"
   }
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-tcp-tg-${1024 + count.index}"))}"
 }

@@ -28,7 +28,7 @@ resource "aws_route_table_association" "route_infrastructure_subnets" {
 resource "aws_internet_gateway" "ig" {
   vpc_id = "${aws_vpc.vpc.id}"
 
-  tags = "${var.tags}"
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-igw"))}"
 }
 
 resource "aws_route_table" "public_route_table" {
@@ -38,6 +38,8 @@ resource "aws_route_table" "public_route_table" {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.ig.id}"
   }
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-public-rtb"))}"
 }
 
 resource "aws_subnet" "public_subnets" {

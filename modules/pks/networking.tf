@@ -4,9 +4,7 @@ resource "aws_subnet" "pks_subnets" {
   cidr_block        = "${cidrsubnet(local.pks_cidr, 2, count.index)}"
   availability_zone = "${element(var.availability_zones, count.index)}"
 
-  tags {
-    Name = "${var.env_name}-pks-subnet${count.index}"
-  }
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-pks-subnet${count.index}"))}"
 }
 
 data "template_file" "pks_subnet_gateways" {

@@ -28,6 +28,8 @@ resource "aws_iam_role" "pks_master" {
   ]
 }
 EOF
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-pks-master"))}"
 }
 
 resource "aws_iam_role_policy_attachment" "pks_master" {
@@ -74,6 +76,8 @@ resource "aws_iam_role" "pks_worker" {
   ]
 }
 EOF
+
+  tags = "${merge(var.tags, map("Name", "${var.env_name}-pks-worker"))}"
 }
 
 resource "aws_iam_role_policy_attachment" "pks_worker" {
