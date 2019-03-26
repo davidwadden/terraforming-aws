@@ -11,6 +11,10 @@ variable "hosted_zone" {
   default = ""
 }
 
+variable "parent_hosted_zone" {
+  default = ""
+}
+
 variable "dns_suffix" {
   type = "string"
 }

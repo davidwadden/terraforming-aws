@@ -18,6 +18,10 @@ variable "hosted_zone" {
   default = ""
 }
 
+variable "parent_hosted_zone" {
+  default = ""
+}
+
 variable "use_route53" {
   default = true
   description = "Indicate whether or not to enable route53"

@@ -34,3 +34,21 @@ resource "aws_route53_record" "name_servers" {
 
   records = ["${local.name_servers}"]
 }
+
+data "aws_route53_zone" "parent_zone" {
+  count = "${var.use_route53 ? (var.parent_hosted_zone == "" ? 0 : 1) : 0}"
+
+  name = "${var.parent_hosted_zone}"
+}
+
+resource "aws_route53_record" "subdomain_ns_record" {
+  count = "${var.use_route53 ? (1 - local.hosted_zone_count) : 0}"
+
+  zone_id = "${data.aws_route53_zone.parent_zone.zone_id}"
+  name    = "${var.env_name}.${var.dns_suffix}"
+
+  type = "NS"
+  ttl  = 300
+
+  records = ["${formatlist("%s.", compact(split(",", local.name_servers)))}"]
+}

@@ -50,6 +50,7 @@ module "infra" {
   internetless       = false
 
   hosted_zone = "${var.hosted_zone}"
+  parent_hosted_zone = "${var.parent_hosted_zone}"
   dns_suffix  = "${var.dns_suffix}"
   use_route53 = "${var.use_route53}"
 
